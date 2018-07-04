@@ -25,6 +25,7 @@ public:
     QFrame *titleFrame;
     QLabel *title;
     QFrame *timeBox;
+    QFrame *frame;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -39,7 +40,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         titleFrame = new QFrame(centralWidget);
         titleFrame->setObjectName(QStringLiteral("titleFrame"));
-        titleFrame->setGeometry(QRect(0, 0, 1001, 51));
+        titleFrame->setGeometry(QRect(0, 0, 1001, 50));
         titleFrame->setStyleSheet(QLatin1String("QFrame#titleFrame {\n"
 "	background-color: #11465B;\n"
 "	border: none;\n"
@@ -55,7 +56,7 @@ public:
 "}"));
         timeBox = new QFrame(centralWidget);
         timeBox->setObjectName(QStringLiteral("timeBox"));
-        timeBox->setGeometry(QRect(40, 90, 281, 151));
+        timeBox->setGeometry(QRect(0, 50, 321, 700));
         timeBox->setStyleSheet(QLatin1String("QFrame#timeBox{\n"
 "	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0.5, y2:0.5, x3:1, y3:1, stop:0 rgba(25, 103, 134,1), stop:1 rgba(18, 78, 102, 0.5), stop:2 rgba(17, 70, 91,0));\n"
 "	border: none;\n"
@@ -63,6 +64,16 @@ public:
 "}"));
         timeBox->setFrameShape(QFrame::StyledPanel);
         timeBox->setFrameShadow(QFrame::Raised);
+        frame = new QFrame(centralWidget);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setGeometry(QRect(0, 50, 321, 701));
+        frame->setStyleSheet(QLatin1String("QFrame{\n"
+"	background: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0.5, x3:1, y3:0, stop:0 rgba(90, 161, 205, 0.7), stop:1 rgba(45, 167, 151,0.2), stop:2 rgba(17, 70, 91,0));\n"
+"	border: none;\n"
+"\n"
+"}"));
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);

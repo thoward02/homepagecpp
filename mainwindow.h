@@ -16,10 +16,16 @@ public:
     ~MainWindow();
 
 private:
+
     Ui::MainWindow *ui;
     QLabel * time;
     QLabel * date;
     QLabel * title;
+    QLabel * weatherTitle;
+    QLabel * exampleCity;
+    QLabel * exampleWeather;
+    QLabel * exampleCity1;
+    QLabel * exampleWeather1;
     int timerId;
 protected:
     void timerEvent(QTimerEvent *event);
