@@ -4,30 +4,15 @@
 #include <ctime>
 
 
-std::string getDay(int day){
-    std::string weekday;
-    switch(day){
-    case 0: weekday  = "Sunday";
-        break;
-    case 1: weekday = "Monday";
-        break;
-    case 2: weekday = "Tuesday";
-        break;
-    case 3: weekday= "Wednesday";
-        break;
-    case 4: weekday = "Thursday";
-        break;
-    case 5: weekday = "Friday";
-        break;
-    case 6: weekday = "Saturday";
-        break;
-    default:
-        weekday = "null";
-        break;
-    }
-    return weekday;
-}
 
+
+std::string getDay(int day) {
+    const std::string dayName[] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
+    if(day < dayName.length()){
+        weekday = dayName[day]; //The original code hosted a switch statment but both poke and para stated i should use this. 
+    }
+    return "null";
+}
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
