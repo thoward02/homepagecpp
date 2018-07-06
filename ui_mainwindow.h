@@ -26,6 +26,8 @@ public:
     QLabel *title;
     QFrame *timeBox;
     QFrame *frame;
+    QFrame *frame_2;
+    QFrame *frame_3;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -74,6 +76,26 @@ public:
 "}"));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
+        frame_2 = new QFrame(centralWidget);
+        frame_2->setObjectName(QStringLiteral("frame_2"));
+        frame_2->setGeometry(QRect(320, 50, 681, 701));
+        frame_2->setStyleSheet(QLatin1String("QFrame{\n"
+"	background: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0.5, x3:1, y3:0, stop:0 rgba(96, 63, 205, 0.7), stop:1 rgba(45, 167, 151,0.2), stop:2 rgba(17, 70, 91,0));\n"
+"	border: none;\n"
+"\n"
+"}"));
+        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Raised);
+        frame_3 = new QFrame(frame_2);
+        frame_3->setObjectName(QStringLiteral("frame_3"));
+        frame_3->setGeometry(QRect(0, 0, 681, 701));
+        frame_3->setStyleSheet(QLatin1String("QFrame{\n"
+"	background: qlineargradient(spread:pad, x0:1, y1:0.4, x2:0.5, y2:0.7, x3:0.5, y3:1, stop:0 rgba(163, 233, 199, 0.5), stop:1 rgba(63, 204, 136,0.3), stop:2 rgba(17, 70, 91,0));\n"
+"	border: none;\n"
+"\n"
+"}"));
+        frame_3->setFrameShape(QFrame::StyledPanel);
+        frame_3->setFrameShadow(QFrame::Raised);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);

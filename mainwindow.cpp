@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <ctime>
+
+
 std::string getDay(int day){
     std::string weekday;
     switch(day){
@@ -30,37 +32,25 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //set window size
+    //Set up the UI
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint); //TODO: Make window sizeable // dragable
+     ui->setupUi(this);
 
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    //Networking pre start
+    connect(&networkManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(handleNetworkData(QNetworkReply*)));
+    QUrl url = QStringLiteral("http://api.openweathermap.org/data/2.5/forecast?q=atlanta&APPID=d058fabdf4fd8dd173c64b06d5a9a610");
+    networkManager.get(QNetworkRequest(url));
 
-    //set up background
-    ui->setupUi(this);
-    weatherTitle = new QLabel("", this);
-    weatherTitle->setGeometry(QRect(10, 250, 301, 41));
-    weatherTitle->setStyleSheet("QLabel {color: #0c3444;font: 20pt 'Kiona';font-style:bold;}");
-    weatherTitle->setText("W E A T H E R");
+    //Build the weather labels
+    atl = new QLabel("", this);
+    atl->setGeometry(QRect(10, 225, 301, 31));
+    atl->setText("Atlanta, Ga");
+    atl->setStyleSheet("QLabel {font: 25px 'Kiona';color: #0b3241;}");
 
-    exampleCity = new QLabel("", this);
-    exampleCity->setGeometry(QRect(10, 325, 301, 31));
-    exampleCity->setText("Atlanta, Ga");
-    exampleCity->setStyleSheet("QLabel {font: 25px 'Kiona';color: #0b3241;}");
-
-    exampleWeather = new QLabel("", this);
-    exampleWeather->setGeometry(QRect(10, 365, 241, 20));
-    exampleWeather->setText("Slightly cloudy");
-    exampleWeather->setStyleSheet("QLabel {font: 10pt 'Kiona';color: #0b3241;}");
-
-    exampleCity1 = new QLabel("", this);
-    exampleCity1->setGeometry(QRect(10, 420, 301, 31));
-    exampleCity1->setText("Austin, Tx");
-    exampleCity1->setStyleSheet("QLabel {font: 25px 'Kiona';color: #0b3241;}");
-
-    exampleWeather1 = new QLabel("", this);
-    exampleWeather1->setGeometry(QRect(10, 460, 241, 20));
-    exampleWeather1->setText("Heavy fog, light rain");
-    exampleWeather1->setStyleSheet("QLabel {font: 10pt 'Kiona';color: #0b3241;}");
-
+    atlW = new QLabel("", this);
+    atlW->setGeometry(QRect(10, 230, 300, 400));
+    atlW->setStyleSheet("QLabel {font: 15pt 'Kiona';color: #0b3241;}");
     //time
     time = new QLabel("",this);
     time->setGeometry(QRect(20, 50, 181, 81));
@@ -73,14 +63,12 @@ MainWindow::MainWindow(QWidget *parent) :
     int intDay = std::stoi(cday);
     std::string weekday = getDay(intDay);
     //compiled
-    std::string today = weekday+"\n"+std::to_string((now1->tm_mon)+1)+"-"+ std::to_string(now1->tm_mday)+"-"+std::to_string((now1->tm_yday)+1834);
+    std::string today = weekday+"\n"+std::to_string((now1->tm_mon)+1)+"-"+ std::to_string(now1->tm_mday)+"-"+std::to_string((now1->tm_yday)+1832);
     date = new QLabel("",this);
     date->setGeometry(20,110,171,81);
     date-> setText(QString::fromStdString(today));
     date->setStyleSheet("QLabel {font: 20pt 'Kiona';color: #0b3241;}");
 
-    //Weather
-    //One box is 120 px tall
 
     //Start the event loop for every 1 second
     timerId = startTimer(1000);
@@ -89,6 +77,62 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+void MainWindow::handleNetworkData(QNetworkReply *networkReply){
+    if (networkReply->error() == QNetworkReply::NoError) {
+        std::vector<std::vector<QString>> weather;
+        std::cout << "Success" << std::endl;
+        //Output comes in as a Byte array, so we convert it to a string using the line below.
+        QString response((QString)networkReply->readAll());
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(response.toUtf8());
+        QJsonObject jsonObject = jsonResponse.object();
+        QJsonArray jsonArray = jsonObject["list"].toArray();
+
+        foreach (const QJsonValue & value, jsonArray) {
+            QJsonObject obj = value.toObject();
+            QJsonArray obj1 = obj["weather"].toArray();
+            QJsonObject temp = obj["main"].toObject();
+            foreach (const QJsonValue & value1, obj1) {
+                //okay this is really FUCKING annoying, for some hellish reason OWM thought it was a good idea todo this weather: [{data}]
+                //THEY PUT JUST ONE OBJECT IN AN ARRAY, SO NOW I HAVE TO GO INTO THE ARRAY AND FIX IT.
+                int tempConvert = temp["temp"].toDouble();
+
+                tempConvert = tempConvert - 273.15;
+                QString tempConverted = QString::number(tempConvert);
+                QJsonObject weatherValue = value1.toObject();
+                QString weatherValueDesc = weatherValue["description"].toString();
+                QString dateTime = obj["dt_txt"].toString();
+                std::vector<QString> data;
+                data.push_back(weatherValueDesc); //the weather
+                data.push_back(dateTime); //the date
+                data.push_back(tempConverted); //temp in CDeg
+                weather.push_back(data);
+
+            }
+
+        }
+        int i = 0;
+        QString weatherToday;
+        QString temp;
+        for(auto a:weather){
+            QString weather = a[0];
+            temp = a[2];
+            std::string datetime = a[1].toUtf8().constData();
+            datetime =(datetime.substr(11,datetime.length()-3));
+            QString datetimeFormatted = QString::fromStdString(datetime);
+            weatherToday = weatherToday + datetimeFormatted + " " + weather +"\n" + temp +"°C"+"\n";
+            i++;
+            if(i > 5){break;}
+        }
+
+
+
+        atlW->setText(weatherToday);
+
+        qDebug() << "Done";
+
+    }
+
 }
 void MainWindow::timerEvent(QTimerEvent *event)
 {

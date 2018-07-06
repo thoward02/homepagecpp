@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QLabel>
 #include <QMainWindow>
+#include <QLabel>
 #include <QFont>
+#include <QtNetwork>
+#include <QJsonDocument>
+#include <vector>
 namespace Ui {
 class MainWindow;
 }
@@ -14,18 +17,22 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+public slots:
+   void handleNetworkData(QNetworkReply *networkReply);
 private:
+    //network
+    QNetworkAccessManager networkManager;
+    //UI
 
     Ui::MainWindow *ui;
+    //Labels
     QLabel * time;
     QLabel * date;
     QLabel * title;
     QLabel * weatherTitle;
-    QLabel * exampleCity;
-    QLabel * exampleWeather;
-    QLabel * exampleCity1;
-    QLabel * exampleWeather1;
+    QLabel * atl;
+    QLabel * atlW;
+
     int timerId;
 protected:
     void timerEvent(QTimerEvent *event);
