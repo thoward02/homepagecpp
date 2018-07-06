@@ -4,13 +4,10 @@
 #include <ctime>
 
 
-
-
+const std::string dayName[] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
 std::string getDay(int day) {
-    const std::string dayName[] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
-    if(day < dayName.length()){
-        weekday = dayName[day]; //The original code hosted a switch statment but both poke and para stated i should use this. 
-    }
+    if(day > 0 && day <= 7)
+        return dayName[day - 1];
     return "null";
 }
 MainWindow::MainWindow(QWidget *parent) :
