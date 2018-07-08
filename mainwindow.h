@@ -3,8 +3,10 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QFont>
+#include <QFrame>
 #include <QtNetwork>
 #include <QJsonDocument>
+#include <QTimer>
 #include <vector>
 namespace Ui {
 class MainWindow;
@@ -19,11 +21,11 @@ public:
     ~MainWindow();
 public slots:
    void handleNetworkData(QNetworkReply *networkReply);
+   void clockFunct();
 private:
     //network
     QNetworkAccessManager networkManager;
     //UI
-
     Ui::MainWindow *ui;
     //Labels
     QLabel * time;
@@ -32,10 +34,13 @@ private:
     QLabel * weatherTitle;
     QLabel * atl;
     QLabel * atlW;
-
-    int timerId;
-protected:
-    void timerEvent(QTimerEvent *event);
+    //Timer
+    QTimer * clock;
+    int clockTime;
+    std::string getDay(int);
+    //Floating right side
+    QFrame *topFrame;
+    QFrame *bottomFrame;
 };
 
 #endif // MAINWINDOW_H

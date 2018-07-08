@@ -4,10 +4,14 @@
 #include <ctime>
 
 
-const std::string dayName[] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
-std::string getDay(int day) {
-    if(day > 0 && day <= 7)
-        return dayName[day - 1];
+
+std::string MainWindow::getDay(int day) {
+const std::string dayName[7] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
+    if(day >= 0 && day <= 7){
+
+        return dayName[day];
+    }
+
     return "null";
 }
 MainWindow::MainWindow(QWidget *parent) :
@@ -43,17 +47,26 @@ MainWindow::MainWindow(QWidget *parent) :
     //weekday -- ctime spits out weekdays in a int, 0 = sunday, 6 = saturday
     std::string cday = std::to_string(now1->tm_wday);
     int intDay = std::stoi(cday);
-    std::string weekday = getDay(intDay);
+    std::string weekday = MainWindow::getDay(intDay);
+    std::cout <<  weekday;
     //compiled
-    std::string today = weekday+"\n"+std::to_string((now1->tm_mon)+1)+"-"+ std::to_string(now1->tm_mday)+"-"+std::to_string((now1->tm_yday)+1832);
+    std::string today = weekday+"\n"+std::to_string((now1->tm_mon)+1)+"-"+ std::to_string(now1->tm_mday)+"-"+std::to_string((now1->tm_year)+1900);
     date = new QLabel("",this);
     date->setGeometry(20,110,171,81);
     date-> setText(QString::fromStdString(today));
     date->setStyleSheet("QLabel {font: 20pt 'Kiona';color: #0b3241;}");
+    //Set up the right side animation
 
 
-    //Start the event loop for every 1 second
-    timerId = startTimer(1000);
+    topFrame = new QFrame(this);
+    topFrame->setGeometry(320, 50, 681, 701);
+    topFrame->setStyleSheet("QFrame{background: qlineargradient(spread:pad, x0:1, y1:0.4, x2:0.5, y2:0.7, x3:0.5, y3:1, stop:0 rgba(163, 233, 199, 0.5), stop:1 rgba(63, 204, 136,0.3), stop:2 rgba(17, 70, 91,0));border: none;}");
+
+    //Start the clock loop for every 1 second
+
+    clock = new QTimer(this);
+    connect(clock, SIGNAL(timeout()), this, SLOT(clockFunct()));
+    clock->start(1000);
 
 }
 MainWindow::~MainWindow()
@@ -111,13 +124,13 @@ void MainWindow::handleNetworkData(QNetworkReply *networkReply){
 
         atlW->setText(weatherToday);
 
-        qDebug() << "Done";
 
     }
 
 }
-void MainWindow::timerEvent(QTimerEvent *event)
+void MainWindow::clockFunct()
 {
+    //Time
     std::time_t t = std::time(0);
     std::tm* now = std::localtime(&t);
     time_t h = (now->tm_hour);
@@ -134,6 +147,5 @@ void MainWindow::timerEvent(QTimerEvent *event)
     time->setText(QString::fromStdString(timenow));
 
 }
-
 
 
