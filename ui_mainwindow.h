@@ -22,42 +22,24 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QFrame *titleFrame;
-    QLabel *title;
     QFrame *timeBox;
-    QFrame *frame;
-    QFrame *frame_2;
+    QFrame *titleFrame;
+    QLabel *label;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1000, 750);
+        MainWindow->resize(1920, 1080);
         MainWindow->setStyleSheet(QLatin1String("QWidget#centralWidget{\n"
 "	background-color: #196D8D;\n"
 "\n"
 "}"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        titleFrame = new QFrame(centralWidget);
-        titleFrame->setObjectName(QStringLiteral("titleFrame"));
-        titleFrame->setGeometry(QRect(0, 0, 1001, 50));
-        titleFrame->setStyleSheet(QLatin1String("QFrame#titleFrame {\n"
-"	background-color: #11465B;\n"
-"	border: none;\n"
-"}"));
-        titleFrame->setFrameShape(QFrame::StyledPanel);
-        titleFrame->setFrameShadow(QFrame::Raised);
-        title = new QLabel(titleFrame);
-        title->setObjectName(QStringLiteral("title"));
-        title->setGeometry(QRect(10, 10, 241, 31));
-        title->setStyleSheet(QLatin1String("QLabel{\n"
-"font: 14pt \"Kiona\";\n"
-"color: #196D8D;\n"
-"}"));
         timeBox = new QFrame(centralWidget);
         timeBox->setObjectName(QStringLiteral("timeBox"));
-        timeBox->setGeometry(QRect(0, 50, 321, 700));
+        timeBox->setGeometry(QRect(0, 30, 321, 1050));
         timeBox->setStyleSheet(QLatin1String("QFrame#timeBox{\n"
 "	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0.5, y2:0.5, x3:1, y3:1, stop:0 rgba(25, 103, 134,1), stop:1 rgba(18, 78, 102, 0.5), stop:2 rgba(17, 70, 91,0));\n"
 "	border: none;\n"
@@ -65,26 +47,23 @@ public:
 "}"));
         timeBox->setFrameShape(QFrame::StyledPanel);
         timeBox->setFrameShadow(QFrame::Raised);
-        frame = new QFrame(centralWidget);
-        frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(0, 50, 321, 701));
-        frame->setStyleSheet(QLatin1String("QFrame{\n"
-"	background: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0.5, x3:1, y3:0, stop:0 rgba(90, 161, 205, 0.7), stop:1 rgba(45, 167, 151,0.2), stop:2 rgba(17, 70, 91,0));\n"
+        titleFrame = new QFrame(centralWidget);
+        titleFrame->setObjectName(QStringLiteral("titleFrame"));
+        titleFrame->setGeometry(QRect(0, 0, 1920, 31));
+        titleFrame->setStyleSheet(QLatin1String("QFrame#titleFrame{\n"
+"	background-color: #11465B;\n"
 "	border: none;\n"
-"\n"
 "}"));
-        frame->setFrameShape(QFrame::StyledPanel);
-        frame->setFrameShadow(QFrame::Raised);
-        frame_2 = new QFrame(centralWidget);
-        frame_2->setObjectName(QStringLiteral("frame_2"));
-        frame_2->setGeometry(QRect(320, 50, 681, 701));
-        frame_2->setStyleSheet(QLatin1String("QFrame#frame_2{\n"
-"	background: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0.5, x3:1, y3:0, stop:0 rgba(96, 63, 205, 0.7), stop:1 rgba(45, 167, 151,0.2), stop:2 rgba(17, 70, 91,0));\n"
-"	border: none;\n"
-"\n"
+        titleFrame->setFrameShape(QFrame::StyledPanel);
+        titleFrame->setFrameShadow(QFrame::Raised);
+        label = new QLabel(titleFrame);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(10, 0, 241, 31));
+        label->setStyleSheet(QLatin1String("QLabel{\n"
+"	color: #196D8D;\n"
+"	\n"
+"	font: 14pt \"Kiona\";\n"
 "}"));
-        frame_2->setFrameShape(QFrame::StyledPanel);
-        frame_2->setFrameShadow(QFrame::Raised);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -95,7 +74,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
-        title->setText(QApplication::translate("MainWindow", "Thoward02/TimeKeeper", nullptr));
+        label->setText(QApplication::translate("MainWindow", "thoward02/gtGui", nullptr));
     } // retranslateUi
 
 };
