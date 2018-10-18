@@ -59,9 +59,11 @@ public slots:
                 }
 
             }
+
             int i = 0;
             QString weatherToday;
             QString temp;
+
             for(auto a:weather){
                 QString weather = a[0];
                 temp = a[2];
@@ -70,6 +72,7 @@ public slots:
                 QString datetimeFormatted = QString::fromStdString(datetime);
                 weatherToday = weatherToday + datetimeFormatted + " " + weather +"\n" + temp +"°C"+"\n";
                 i++;
+
                 if(i > 5){break;}
             }
 
@@ -101,10 +104,10 @@ public slots:
        std::string passwordD = passwordEntry->text().toStdString();
        //Check and make sure username and password fields have content
        if(usernameD.size() < 1){
-           MainWindow::displayLoginErr("usernameempty");
+           MainWindow::displayLoginErr(0);
        }else{
            if(passwordD.size() < 1){
-               MainWindow::displayLoginErr("passwordempty");
+               MainWindow::displayLoginErr(1);
            }else{
                loginCont = true;
            }
@@ -134,12 +137,12 @@ public slots:
                QString token = successMessage["token"].toString();
                MainWindow::loadServerUi();
            }else{
-               MainWindow::displayLoginErr("wrngpassword");
+               MainWindow::displayLoginErr(2);
            }
 
        }else{
            //No connection found -- return err
-           MainWindow::displayLoginErr("noconn");
+           MainWindow::displayLoginErr(4);
        }
    }
    void clockFunct(){
@@ -184,7 +187,7 @@ private:
     QLineEdit * passwordEntry;
     QPushButton * loginButton;
     void keyPressEvent(QKeyEvent *enter); //For hitting enter to login ~ need to del this event on login.
-    void displayLoginErr(std::string);
+    void displayLoginErr(int);
     void loadServerUi();
     std::string getDay(int day) {
     const std::string dayName[7] = {"Sunday", "Monday", "Tuesday", "Wedensday", "Thursday", "Friday", "Saturday"};
